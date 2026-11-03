@@ -444,6 +444,15 @@
         "placeholder": "Wybierz mikrofon...",
         "loading": "Wczytywanie..."
       },
+      "microphonePriority": {
+        "title": "Kolejność mikrofonów",
+        "description": "Preferowane mikrofony w kolejności. Używany jest pierwszy podłączony; gdy żaden nie jest podłączony, obowiązuje ustawienie Mikrofon powyżej.",
+        "add": "Dodaj mikrofon...",
+        "disconnected": "(odłączony)",
+        "moveUp": "Przesuń {{name}} wyżej",
+        "moveDown": "Przesuń {{name}} niżej",
+        "remove": "Usuń {{name}}"
+      },
       "channel": {
         "title": "Kanał wejściowy",
         "description": "Wybierz kanał wejściowy, z którego chcesz nagrywać. Użyj tej opcji, jeśli interfejs audio ma wiele wejść.",

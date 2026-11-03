@@ -444,6 +444,15 @@
         "placeholder": "Pilih mikrofon...",
         "loading": "Memuat..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Kanal Masukan",
         "description": "Pilih kanal masukan yang akan direkam. Gunakan ini jika antarmuka audio Anda memiliki beberapa masukan.",

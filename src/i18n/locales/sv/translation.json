@@ -444,6 +444,15 @@
         "placeholder": "Välj mikrofon...",
         "loading": "Laddar..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Ingångskanal",
         "description": "Välj vilken ingångskanal du vill spela in från. Använd detta om ditt ljudgränssnitt har flera ingångar.",

@@ -444,6 +444,15 @@
         "placeholder": "Chọn micrô...",
         "loading": "Đang tải..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Kênh đầu vào",
         "description": "Chọn kênh đầu vào để ghi âm. Sử dụng tùy chọn này nếu giao diện âm thanh của bạn có nhiều đầu vào.",

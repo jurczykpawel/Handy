@@ -444,6 +444,15 @@
         "placeholder": "Microfoon selecteren...",
         "loading": "Laden..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Ingangskanaal",
         "description": "Selecteer het ingangskanaal waarvan moet worden opgenomen. Gebruik dit als je audio-interface meerdere ingangen heeft.",

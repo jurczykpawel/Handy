@@ -444,6 +444,15 @@
         "placeholder": "Sélectionner un microphone...",
         "loading": "Chargement..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Canal d’entrée",
         "description": "Sélectionnez le canal d’entrée à enregistrer. Utilisez cette option si votre interface audio possède plusieurs entrées.",

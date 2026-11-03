@@ -444,6 +444,15 @@
         "placeholder": "选择麦克风...",
         "loading": "加载中..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "输入通道",
         "description": "选择要录制的输入通道。如果您的音频接口有多个输入，请使用此选项。",

@@ -444,6 +444,15 @@
         "placeholder": "Выбрать микрофон...",
         "loading": "Загрузка..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "Входной канал",
         "description": "Выберите входной канал для записи. Используйте эту настройку, если у вашего аудиоинтерфейса несколько входов.",
