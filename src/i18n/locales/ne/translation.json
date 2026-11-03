@@ -444,6 +444,15 @@
         "placeholder": "माइक्रोफोन चयन गर्नुहोस्...",
         "loading": "लोड गरिँदैछ..."
       },
+      "microphonePriority": {
+        "title": "Microphone Priority",
+        "description": "Preferred microphones in order. The first connected one is used; when none is connected, the Microphone setting above applies.",
+        "add": "Add microphone...",
+        "disconnected": "(disconnected)",
+        "moveUp": "Move {{name}} up",
+        "moveDown": "Move {{name}} down",
+        "remove": "Remove {{name}}"
+      },
       "channel": {
         "title": "इनपुट च्यानल",
         "description": "रेकर्ड गर्ने इनपुट च्यानल चयन गर्नुहोस्। तपाईंको अडियो इन्टरफेसमा धेरै इनपुटहरू छन् भने यो प्रयोग गर्नुहोस्।",

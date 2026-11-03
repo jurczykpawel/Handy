@@ -254,6 +254,26 @@ pub async fn set_selected_microphone(app: AppHandle, device_name: String) -> Res
 
 #[tauri::command]
 #[specta::specta]
+pub async fn set_microphone_priority(app: AppHandle, devices: Vec<String>) -> Result<(), String> {
+    let mut settings = get_settings(&app);
+    let mut unique: Vec<String> = Vec::with_capacity(devices.len());
+    for name in devices {
+        if !name.is_empty() && !unique.contains(&name) {
+            unique.push(name);
+        }
+    }
+    settings.microphone_priority = unique;
+    write_settings(&app, settings);
+
+    let rm = app.state::<Arc<AudioRecordingManager>>().inner().clone();
+    tokio::task::spawn_blocking(move || rm.update_selected_device())
+        .await
+        .map_err(|e| format!("audio task join failed: {}", e))?
+        .map_err(|e| format!("Failed to update selected device: {}", e))
+}
+
+#[tauri::command]
+#[specta::specta]
 pub fn get_selected_microphone(app: AppHandle) -> Result<String, String> {
     let settings = get_settings(&app);
     Ok(settings

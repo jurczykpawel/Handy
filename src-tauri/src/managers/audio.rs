@@ -266,6 +266,20 @@ enum DesiredMicrophone {
     Default,
     Selected(String),
     Clamshell(String),
+    /// Ordered preference list; falls back to `fallback` when none of the
+    /// listed microphones is connected.
+    Priority {
+        priority: Vec<String>,
+        fallback: Option<String>,
+    },
+}
+
+/// The first microphone from `priority` that is among `available`.
+fn pick_priority_microphone<'a>(priority: &'a [String], available: &[String]) -> Option<&'a str> {
+    priority
+        .iter()
+        .find(|name| available.iter().any(|a| a == *name))
+        .map(String::as_str)
 }
 
 /// Result of resolving the persisted preference to a recorder device ID.
@@ -583,9 +597,76 @@ impl AudioRecordingManager {
                 return DesiredMicrophone::Clamshell(clamshell_microphone.clone());
             }
         }
+        if !settings.microphone_priority.is_empty() {
+            return DesiredMicrophone::Priority {
+                priority: settings.microphone_priority.clone(),
+                fallback: settings.selected_microphone.clone(),
+            };
+        }
         match &settings.selected_microphone {
             Some(name) => DesiredMicrophone::Selected(name.clone()),
             None => DesiredMicrophone::Default,
+        }
+    }
+
+    /// Resolves an ordered preference list. Always enumerates, unless the
+    /// cached device is the top choice (nothing can outrank it), so a
+    /// higher-priority microphone plugged in later is picked up on the next
+    /// stream open.
+    fn resolve_priority_microphone(
+        &self,
+        priority: Vec<String>,
+        fallback: Option<String>,
+    ) -> MicrophoneResolution {
+        if let Some((cached_name, id)) = self.cached_device.lock().unwrap().as_ref() {
+            if priority.first() == Some(cached_name) {
+                debug!(
+                    "device resolve: cache hit for top priority '{}'",
+                    cached_name
+                );
+                return MicrophoneResolution {
+                    device: Some(id.clone()),
+                    from_cache: true,
+                    unavailable_selected_microphone: None,
+                };
+            }
+        }
+
+        let devices = match handy_recorder::list_input_devices() {
+            Ok(devices) => devices,
+            Err(e) => {
+                debug!("Failed to list devices, using default: {}", e);
+                return MicrophoneResolution {
+                    device: None,
+                    from_cache: false,
+                    unavailable_selected_microphone: None,
+                };
+            }
+        };
+        let names: Vec<String> = devices.iter().map(|d| d.name.clone()).collect();
+        let chosen = pick_priority_microphone(&priority, &names)
+            .map(str::to_owned)
+            .or(fallback);
+        let device = chosen.as_ref().and_then(|name| {
+            devices
+                .iter()
+                .find(|d| &d.name == name)
+                .map(|d| (name.clone(), d.id.clone()))
+        });
+        debug!(
+            "device resolve: priority list -> {:?}",
+            device.as_ref().map(|d| &d.0)
+        );
+        let device = device.map(|(name, id)| {
+            *self.cached_device.lock().unwrap() = Some((name, id.clone()));
+            id
+        });
+        // Never erase anything here: a missing microphone is expected with a
+        // priority list, it is simply skipped until it is connected again.
+        MicrophoneResolution {
+            device,
+            from_cache: false,
+            unavailable_selected_microphone: None,
         }
     }
 
@@ -606,6 +687,9 @@ impl AudioRecordingManager {
             }
             DesiredMicrophone::Selected(name) => (name.clone(), Some(name)),
             DesiredMicrophone::Clamshell(name) => (name, None),
+            DesiredMicrophone::Priority { priority, fallback } => {
+                return self.resolve_priority_microphone(priority, fallback);
+            }
         };
 
         // Cache hit: skip the enumeration. A stale ID (device unplugged)
@@ -1414,5 +1498,37 @@ mod tests {
     fn microphone_config_takes_the_headset_only_in_airpods_mode() {
         assert!(!microphone_config(None, None, false, 480).take_headset);
         assert!(microphone_config(None, None, true, 480).take_headset);
+    }
+
+    fn names(list: &[&str]) -> Vec<String> {
+        list.iter().map(|s| s.to_string()).collect()
+    }
+
+    #[test]
+    fn priority_picks_the_first_connected_microphone() {
+        let priority = names(&["RODE NT-USB", "AirPods Pro"]);
+        let available = names(&["AirPods Pro", "MacBook Pro Microphone", "RODE NT-USB"]);
+        assert_eq!(
+            pick_priority_microphone(&priority, &available),
+            Some("RODE NT-USB")
+        );
+    }
+
+    #[test]
+    fn priority_skips_disconnected_microphones() {
+        let priority = names(&["RODE NT-USB", "AirPods Pro"]);
+        let available = names(&["AirPods Pro", "MacBook Pro Microphone"]);
+        assert_eq!(
+            pick_priority_microphone(&priority, &available),
+            Some("AirPods Pro")
+        );
+    }
+
+    #[test]
+    fn priority_yields_none_when_nothing_listed_is_connected() {
+        let priority = names(&["RODE NT-USB"]);
+        let available = names(&["MacBook Pro Microphone"]);
+        assert_eq!(pick_priority_microphone(&priority, &available), None);
+        assert_eq!(pick_priority_microphone(&[], &available), None);
     }
 }

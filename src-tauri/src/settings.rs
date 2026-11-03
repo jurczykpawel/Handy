@@ -449,6 +449,11 @@ pub struct AppSettings {
     pub selected_channel: Option<u16>,
     #[serde(default)]
     pub clamshell_microphone: Option<String>,
+    /// Microphones in order of preference. The first one that is connected
+    /// is used; when none is, `selected_microphone` (or the system default)
+    /// applies. Empty means the feature is off.
+    #[serde(default)]
+    pub microphone_priority: Vec<String>,
     #[serde(default)]
     pub selected_output_device: Option<String>,
     #[serde(default = "default_translate_to_english")]
@@ -1028,6 +1033,7 @@ pub fn get_default_settings() -> AppSettings {
         selected_microphone: None,
         selected_channel: None,
         clamshell_microphone: None,
+        microphone_priority: Vec::new(),
         selected_output_device: None,
         translate_to_english: false,
         selected_language: "auto".to_string(),

@@ -124,6 +124,8 @@ const settingUpdaters: {
       throw new Error(result.error);
     }
   },
+  microphone_priority: (value) =>
+    commands.setMicrophonePriority(value as string[]),
   clamshell_microphone: (value) =>
     commands.setClamshellMicrophone(
       (value as string) === "Default" ? "default" : (value as string),
